@@ -37,8 +37,13 @@ The Slaves resilience is automatically handled by the master Spark. The Masters 
 
 The cluster EMR is used to transfer data from S3 to our Cassandra nodes on EC2. The reason for this architecture is that our EC2 Spark instaces could not connect to S3 due to issues with package dependencies. 
 
+We do not find any solution :
+[link](https://docs.hortonworks.com/HDPDocuments/HDCloudAWS/HDCloudAWS-1.8.0/bk_hdcloud-aws/content/s3-trouble/index.html)
 ![alt text](hortonworks.png)
 
+When all data are on our Casandra nodes, we shutdown the EMR cluster. We run our Spark-SQL request on Zeppelin.
+
+![alt text](spark/png)
 ## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
