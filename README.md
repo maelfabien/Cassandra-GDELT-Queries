@@ -26,6 +26,19 @@ The conceptual model of the data is the following :
 The architecture we have chosen is the following :
 ![alt text](archi.png)
 
+Our architecture is composed by one cluster EMR (1 master and 5 slaves) and one cluster EC2 (8 instances).
+
+In our 8 instances EC2 we have : 
+- 2 Masters nodes with apache-Spark-2.3.2 and apache-Zeppelin-0.8.0
+- 5 Slaves nodes with apache-Spark-2.3.2 and apache-cassandra-3.11.2, including zookeeper installed on 2 of these nodes.
+- The last one is a node created for the resilience of the Master. We Installed zookeeper in it. 
+
+The Slaves resilience is automatically handled by the master Spark. The Masters resilience is handled by Zookeper.
+
+The cluster EMR is used to transfer data from S3 to our Cassandra nodes on EC2. The reason for this architecture is that our EC2 Spark instaces could not connect to S3 due to issues with package dependencies. 
+
+![alt text](hortonworks.png)
+
 ## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
