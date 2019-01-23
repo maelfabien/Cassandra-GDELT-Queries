@@ -38,3 +38,52 @@ def fileDownloader(urlOfFileToDownload: String, fileName: String) = {
     else
         url #> new File(fileName) !!
 }
+
+fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt", "/tmp/masterfilelist.txt") // save the list file to the Spark Master
+fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt", "/tmp/masterfilelist_translation.txt") //same for Translation file
+
+awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist.txt", new File("/tmp/masterfilelist.txt") )
+awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist_translation.txt", new File( "/tmp/masterfilelist_translation.txt") )
+
+val list_csv = spark.read.format("csv").option("delimiter", " ").
+                    csv("s3a://fabien-mael-telecom-gdelt2018/masterfilelist.txt").
+                    withColumnRenamed("_c0","size").
+                    withColumnRenamed("_c1","hash").
+                    withColumnRenamed("_c2","url")
+val list_2018_tot = list_csv.where(col("url").like("%/2018%"))
+list_2018_tot.select("url").repartition(100).foreach( r=> {
+            val URL = r.getAs[String](0)
+            val fileName = r.getAs[String](0).split("/").last
+            val dir = "/mnt/tmp/"
+            val localFileName = dir + fileName
+            fileDownloader(URL,  localFileName)
+            val localFile = new File(localFileName)
+            AwsClient.s3.putObject("fabien-mael-telecom-gdelt2018", fileName, localFile )
+            localFile.delete()
+})
+
+```
+We duplicate this task for the translation data. Then, we need to create four data frames : 
+- Mentions in english
+- Events in english
+- Mentions translated
+- Events translated
+
+This is done the following way :
+```
+val mentionsRDD_trans = sc.binaryFiles("s3a://fabien-mael-telecom-gdelt2018/201801*translation.mentions.CSV.zip"). // charger quelques fichers via une regex
+   flatMap {  // decompresser les fichiers
+       case (name: String, content: PortableDataStream) =>
+          val zis = new ZipInputStream(content.open)
+          Stream.continually(zis.getNextEntry).
+                takeWhile{ case null => zis.close(); false
+                       case _ => true }.
+                flatMap { _ =>
+                    val br = new BufferedReader(new InputStreamReader(zis))
+                    Stream.continually(br.readLine()).takeWhile(_ != null)
+                }
+    }
+val mentionsDF_trans = mentionsRDD_trans.map(x => x.split("\t")).map(row => row.mkString(";")).map(x => x.split(";")).toDF()
+```
+
+
