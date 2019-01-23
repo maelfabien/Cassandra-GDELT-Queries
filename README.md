@@ -1,5 +1,7 @@
 # GDELT : A Cassandra resilient architecture
 
+Contributors : Raphael Lederman, Anatoli De Bradke, Alexandre Bec, Anthony Houdaille, Thomas Binetruy
+
 The GDELT Project monitors the world's broadcast, print, and web news from nearly every corner of every country in over 100 languages and identifies the people, locations, organizations, themes, sources, emotions, counts, quotes, images and events driving our global society every second of every day, creating a free open platform for computing on the entire world. With new files uploaded every 15 minutes, GDELT data bases contain more than 500 Gb of zipped data for the single year 2018.
 
 In order to be able to work with a large amount of data, we have chosen to work with the following architecture :
@@ -23,6 +25,8 @@ The conceptual model of the data is the following :
 
 The architecture we have chosen is the following :
 ![alt text](archi.png)
+
+## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
 ```
@@ -85,5 +89,61 @@ val mentionsRDD_trans = sc.binaryFiles("s3a://fabien-mael-telecom-gdelt2018/2018
     }
 val mentionsDF_trans = mentionsRDD_trans.map(x => x.split("\t")).map(row => row.mkString(";")).map(x => x.split(";")).toDF()
 ```
+
+In order to reach fast responding queries, we create several smaller data frames for the different queries we later on build. For example :
+```
+// Mentions
+val mentions_trans_1 = mentionsDF_trans.withColumn("_tmp", $"value").select(
+    $"_tmp".getItem(0).as("globaleventid"),
+    $"_tmp".getItem(14).as("language")
+    )
+val mentions_1 = mentionsDF.withColumn("_tmp", $"value").select(
+    $"_tmp".getItem(0).as("globaleventid"),
+    $"_tmp".getItem(14).as("language")
+    )
+    
+// Events 
+val events_trans_1 = exportDF_trans.withColumn("_tmp", $"value").select(
+    $"_tmp".getItem(0).as("globaleventid"),
+    $"_tmp".getItem(1).as("day"),
+    $"_tmp".getItem(33).as("numarticles"),
+    $"_tmp".getItem(53).as("actioncountry")
+    )
+val events_1 = exportDF.withColumn("_tmp", $"value").select(
+    $"_tmp".getItem(0).as("globaleventid"),
+    $"_tmp".getItem(1).as("day"),
+    $"_tmp".getItem(33).as("numarticles"),
+    $"_tmp".getItem(53).as("actioncountry")
+    )
+    
+val df_events_1 = events_1.union(events_trans_1)
+val df_mentions_1 = mentions_1.union(mentions_trans_1)
+
+// Join events and mentions
+val df_1 = df_mentions_1.join(df_events_1,"GlobalEventID")
+```
+
+We can later on build the Cassandra tables that will allow us transfer the spark dataframes :
+```
+%cassandra
+CREATE TABLE q1_1(
+day int,
+language text,
+actioncountry text,
+numarticles int,
+PRIMARY KEY (day, language, actioncountry));
+```
+
+Finally, we can write the dataframe to Cassandra. Therefore, the lazy evaluation will take place before we add requests to the data base.
+```
+df_1.write.cassandraFormat("q1_1", "gdelt_datas").save()
+val df_1_1 = spark.read.cassandraFormat("q1_1", "gdelt_datas").load()
+df_1_1.createOrReplaceTempView("q1_1")
+```
+
+The requests are then simple to make :
+```z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))```
+
+![alt text](q1.png)
 
 
