@@ -74,7 +74,7 @@ We duplicate this task for the translation data. Then, we need to create four da
 - Events translated
 
 This is done the following way :
-```
+``` scala
 val mentionsRDD_trans = sc.binaryFiles("s3a://fabien-mael-telecom-gdelt2018/201801*translation.mentions.CSV.zip"). // charger quelques fichers via une regex
    flatMap {  // decompresser les fichiers
        case (name: String, content: PortableDataStream) =>
@@ -91,7 +91,7 @@ val mentionsDF_trans = mentionsRDD_trans.map(x => x.split("\t")).map(row => row.
 ```
 
 In order to reach fast responding queries, we create several smaller data frames for the different queries we later on build. For example :
-```
+``` scala
 // Mentions
 val mentions_trans_1 = mentionsDF_trans.withColumn("_tmp", $"value").select(
     $"_tmp".getItem(0).as("globaleventid"),
@@ -124,7 +124,7 @@ val df_1 = df_mentions_1.join(df_events_1,"GlobalEventID")
 ```
 
 We can later on build the Cassandra tables that will allow us transfer the spark dataframes :
-```
+``` scala
 %cassandra
 CREATE TABLE q1_1(
 day int,
@@ -135,14 +135,16 @@ PRIMARY KEY (day, language, actioncountry));
 ```
 
 Finally, we can write the dataframe to Cassandra. Therefore, the lazy evaluation will take place before we add requests to the data base.
-```
+``` scala
 df_1.write.cassandraFormat("q1_1", "gdelt_datas").save()
 val df_1_1 = spark.read.cassandraFormat("q1_1", "gdelt_datas").load()
 df_1_1.createOrReplaceTempView("q1_1")
 ```
 
 The requests are then simple to make :
-```z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))```
+``` scala 
+z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))
+```
 
 ![alt text](q1.png)
 
