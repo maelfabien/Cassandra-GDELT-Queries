@@ -146,4 +146,17 @@ The requests are then simple to make :
 
 ![alt text](q1.png)
 
+## 4. Budget
+
+One should take into account the budget of implementing such structure. The costs for our project was the following :
+- S3 storage and EMR to load the data in Cassandra : 50$
+- EC2 instances : 40$
+
+## 5. Potential improvements
+
+Some recent projects on the GDELT Project include :
+- a streaming architecture updating the data every 15 minutes
+- a web interface using CartoDB
+- ...
+
 
