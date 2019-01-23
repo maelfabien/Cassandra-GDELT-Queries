@@ -9,5 +9,17 @@ In order to be able to work with a large amount of data, we have chosen to work 
 
 ## 1. The data
 
+Description of the data Mentions and Events : http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf
+Description of the Graph of Events GKG : http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
+
 ![alt text](data.png)
 
+A event is defined as an action that an actor (Actor1) takes on another actor (Actor2). A mention is an article or any source that talks about an event. The GKG database reflects the events that took place in the world, ordered by theme, type of event and location.
+
+The conceptual model of the data is the following :
+![alt text](concept.png)
+
+## 2. Architecture
+
+The architecture we have chosen is the following :
+![alt text](archi.png)
