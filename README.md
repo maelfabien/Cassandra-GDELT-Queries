@@ -43,7 +43,7 @@ We do not find any solution :
 
 When all data are on our Casandra nodes, we shutdown the EMR cluster. We run our Spark-SQL request on Zeppelin.
 
-![alt text](spark/png)
+![alt text](spark.png)
 ## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
