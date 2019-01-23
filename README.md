@@ -29,7 +29,7 @@ The architecture we have chosen is the following :
 ## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
-```
+``` scala
 def fileDownloader(urlOfFileToDownload: String, fileName: String) = {
     val url = new URL(urlOfFileToDownload)
     val connection = url.openConnection().asInstanceOf[HttpURLConnection]
