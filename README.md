@@ -23,3 +23,18 @@ The conceptual model of the data is the following :
 
 The architecture we have chosen is the following :
 ![alt text](archi.png)
+
+The ZIP files are extracted from the GDELT website :
+```
+def fileDownloader(urlOfFileToDownload: String, fileName: String) = {
+    val url = new URL(urlOfFileToDownload)
+    val connection = url.openConnection().asInstanceOf[HttpURLConnection]
+    connection.setConnectTimeout(5000)
+    connection.setReadTimeout(5000)
+    connection.connect()
+
+    if (connection.getResponseCode >= 400)
+        println("error")
+    else
+        url #> new File(fileName) !!
+}
