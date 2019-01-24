@@ -14,17 +14,17 @@ In order to be able to work with a large amount of data, we have chosen to work 
 Description of the data Mentions and Events : http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf
 Description of the Graph of Events GKG : http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
 
-![alt text](data.png)
+![alt text](Images/data.png)
 
 A event is defined as an action that an actor (Actor1) takes on another actor (Actor2). A mention is an article or any source that talks about an event. The GKG database reflects the events that took place in the world, ordered by theme, type of event and location.
 
 The conceptual model of the data is the following :
-![alt text](concept.png)
+![alt text](Images/concept.png)
 
 ## 2. Architecture
 
 The architecture we have chosen is the following :
-![alt text](archi.png)
+![alt text](Images/archi.png)
 
 Our architecture is composed by one cluster EMR (1 master and 5 slaves) and one cluster EC2 (8 instances).
 
@@ -39,11 +39,11 @@ The cluster EMR is used to transfer data from S3 to our Cassandra nodes on EC2. 
 
 We do not find any solution :
 [link](https://docs.hortonworks.com/HDPDocuments/HDCloudAWS/HDCloudAWS-1.8.0/bk_hdcloud-aws/content/s3-trouble/index.html)
-![alt text](hortonworks.png)
+![alt text](Images/hortonworks.png)
 
 When all data are on our Casandra nodes, we shutdown the EMR cluster. We run our Spark-SQL request on Zeppelin.
 
-![alt text](spark.png)
+![alt text](Images/spark.png)
 ## 3. Data Preparation
 
 The ZIP files are extracted from the GDELT website :
@@ -164,15 +164,15 @@ The requests are then simple to make :
 z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))
 ```
 
-![alt text](q1.png)
+![alt text](Images/q1.png)
 
 Zeppelin also has a great feature of Map Visualization. In order to activate it, you need to activate the Helium Zeppelin Leaflet in Zeppelin.
 
-![alt text](helium.png)
+![alt text](Images/helium.png)
 
 Simply click on Helium from the interpreter menu, and activate "Zeppelin Leaflet". A new option on the Zeppelin show request will then appear :
 
-![alt text](map.png)
+![alt text](Images/map.png)
 
 ## 4. Budget
 
