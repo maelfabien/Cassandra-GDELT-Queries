@@ -244,6 +244,8 @@ One should take into account the budget of implementing such structure. The cost
 - S3 storage and EMR to load the data in Cassandra : 150$
 - EC2 instances : 60$
 
+For an overall budget of 210$. The architecture was up for 3 days.
+
 ## 7. Potential improvements
 
 Some recent projects on the GDELT Project include :
