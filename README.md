@@ -209,7 +209,7 @@ The requests are then simple to make :
 z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))
 ```
 
-![alt text](Images/q1.png)
+![alt text](Images/q1_2.png)
 
 Zeppelin also has a great feature of Map Visualization. In order to activate it, you need to activate the Helium Zeppelin Leaflet in Zeppelin.
 
@@ -219,7 +219,30 @@ Simply click on Helium from the interpreter menu, and activate "Zeppelin Leaflet
 
 ![alt text](Images/map.png)
 
-## 4. Performance
+## 4. Exploration
+
+We will present in this section the results of the analsis we lead on the Cassandra tables :
+
+1. Number of articles by day and language
+![alt text](Images/q1_1.png)
+
+2. Number of articles by day
+![alt text](Images/q1_2.png)
+
+3. Number of articles by language
+![alt text](Images/q1_3.png)
+
+4. Countries which received the most negative articles 
+![alt text](Images/q3_1.png)
+
+5. Actors or countries that divide the most 
+![alt text](Images/q4_1.png)
+
+6. Evolution of the relation two countries (Here USA and Israel)
+![alt text](Images/q5_1.png)
+
+
+## 5. Performance
 
 The total zipped files (Mentions, Events, GKG) reached 698.9 Gb on our S3 bucket. 
 
@@ -231,14 +254,14 @@ aws s3 ls --summarize --human-readable --recursive s3://fabien-mael-telecom-gdel
 
 In order to write the files into Cassandra, for 1 month of data, the requests usually took around 20 minutes. Then, once loaded, the different requests could be loaded within 1 to 10 seconds at most.
 
-## 5. Resiliency
+## 6. Resiliency
 
 By killing a worker from AWS :
 ![alt text](Images/worker.png)
 
 The resiliency should be observed. The requests should always be able to run due to the replication factor of Cassandra.
 
-## 6. Budget
+## 7. Budget
 
 One should take into account the budget of implementing such structure. The costs for our project was the following :
 - S3 storage and EMR to load the data in Cassandra : 150$
@@ -246,7 +269,7 @@ One should take into account the budget of implementing such structure. The cost
 
 For an overall budget of 210$. The architecture was up for 3 days.
 
-## 7. Potential improvements
+## 8. Potential improvements
 
 Some recent projects on the GDELT Project include :
 - a streaming architecture updating the data every 15 minutes
