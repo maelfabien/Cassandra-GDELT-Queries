@@ -13,8 +13,8 @@ In order to be able to work with a large amount of data, we have chosen to work 
 
 ## 1. The data
 
-Description of the data Mentions and Events : http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf
-Description of the Graph of Events GKG : http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
+- Description of the data Mentions and Events : http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf
+- Description of the Graph of Events GKG : http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
 
 ![alt text](Images/data.png)
 
@@ -48,7 +48,9 @@ When all data are on our Casandra nodes, we shutdown the EMR cluster. We run our
 ![alt text](Images/spark.png)
 ## 3. Data Preparation
 
-The ZIP files are extracted from the GDELT website :
+The ZIP files are extracted from the GDELT website following this procedure :
+
+1. Define a file downloading function
 ``` scala
 def fileDownloader(urlOfFileToDownload: String, fileName: String) = {
     val url = new URL(urlOfFileToDownload)
@@ -62,9 +64,14 @@ def fileDownloader(urlOfFileToDownload: String, fileName: String) = {
     else
         url #> new File(fileName) !!
 }
+```
 
+Grab the list of URLs to download the ZIP files from, from the english and the translated documents.
+
+``` scala
+// Download locally the list of URL
 fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt", "/tmp/masterfilelist.txt") // save the list file to the Spark Master
-fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt", "/tmp/masterfilelist_translation.txt") //same for Translation file
+fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt", "/tmp/masterfilelist_translation.txt") 
 
 awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist.txt", new File("/tmp/masterfilelist.txt") )
 awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist_translation.txt", new File( "/tmp/masterfilelist_translation.txt") )
