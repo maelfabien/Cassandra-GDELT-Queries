@@ -261,6 +261,8 @@ By killing a worker from AWS :
 
 The resiliency should be observed. The requests should always be able to run due to the replication factor of Cassandra.
 
+Also, if one of the Spark master nodes fail, Zookeeper elects a new leader node and workers switch to the new leader node.
+
 ## 7. Budget
 
 One should take into account the budget of implementing such structure. The costs for our project was the following :
