@@ -1,8 +1,6 @@
 # Configuring zookeeper to achieve Spark resilience
 
-In our architecture, we used **3 Zookeeper instances** to secure the Spark master instances. Zookeeper may be installed on its own on a node, or together with Spark/Cassandra on a worker node. *See architecture*
-
-It is important that each zookeeper node is aware of other zookeeper instances so that they form a quorum of 3. Quorum may be composed of 3, 5, 7.. any odd number of nodes.
+In our architecture, we used **3 Zookeeper instances** to secure the Spark master instances. Zookeeper may be installed on its own on a node, or together with Spark/Cassandra on a worker node. *See architecture*. It is important that each zookeeper node is aware of other zookeeper instances so that they form a quorum of 3. Replicated ZK instances are important for a resilient cluster, here we use a quorum of 3 nodes.
 
 When Spark masters are made resilient, a leader is elected at startup. If one master fails, a new leader is elected in a transparent way, and workers are automatically linked to the new leader.
 
