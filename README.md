@@ -46,7 +46,31 @@ We do not find any solution :
 When all data are on our Casandra nodes, we shutdown the EMR cluster. We run our Spark-SQL request on Zeppelin.
 
 ![alt text](Images/spark.png)
+
 ## 3. Data Preparation
+
+Import the necessary packages :
+``` scala
+// Imports
+import sys.process._
+import java.net.URL
+import java.io.File
+import java.io.File
+import java.nio.file.{Files, StandardCopyOption}
+import java.net.HttpURLConnection 
+import org.apache.spark.sql.functions._
+import sqlContext.implicits._
+import org.apache.spark.input.PortableDataStream
+import java.util.zip.ZipInputStream
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import org.apache.spark.sql.SQLContext
+import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.auth.BasicAWSCredentials
+import org.apache.spark.sql.cassandra._
+import com.datastax.spark.connector._
+import org.apache.spark.sql.types.IntegerType
+```
 
 The ZIP files are extracted from the GDELT website following this procedure :
 
