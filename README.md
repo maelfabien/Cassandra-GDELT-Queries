@@ -231,13 +231,20 @@ aws s3 ls --summarize --human-readable --recursive s3://fabien-mael-telecom-gdel
 
 In order to write the files into Cassandra, for 1 month of data, the requests usually took around 20 minutes. Then, once loaded, the different requests could be loaded within 1 to 10 seconds at most.
 
-## 5. Budget
+## 5. Resiliency
+
+By killing a worker from AWS :
+![alt text](Images/worker.png)
+
+The resiliency should be observed. The requests should always be able to run due to the replication factor of Cassandra.
+
+## 6. Budget
 
 One should take into account the budget of implementing such structure. The costs for our project was the following :
 - S3 storage and EMR to load the data in Cassandra : 150$
 - EC2 instances : 60$
 
-## 6. Potential improvements
+## 7. Potential improvements
 
 Some recent projects on the GDELT Project include :
 - a streaming architecture updating the data every 15 minutes
