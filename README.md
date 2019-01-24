@@ -4,7 +4,7 @@ Contributors : Raphael Lederman, Anatoli De Bradke, Alexandre Bec, Anthony Houda
 
 # GDELT : A Cassandra resilient architecture
 
-The GDELT Project monitors the world's broadcast, print, and web news from nearly every corner of every country in over 100 languages and identifies the people, locations, organizations, themes, sources, emotions, counts, quotes, images and events driving our global society every second of every day, creating a free open platform for computing on the entire world. With new files uploaded every 15 minutes, GDELT data bases contain more than 500 Gb of zipped data for the single year 2018.
+The GDELT Project monitors the world's broadcast, print, and web news from nearly every corner of every country in over 100 languages and identifies the people, locations, organizations, themes, sources, emotions, counts, quotes, images and events driving our global society every second of every day, creating a free open platform for computing on the entire world. With new files uploaded every 15 minutes, GDELT data bases contain more than 700 Gb of zipped data for the single year 2018.
 
 In order to be able to work with a large amount of data, we have chosen to work with the following architecture :
 - NoSQL : Cassandra
@@ -30,7 +30,7 @@ The architecture we have chosen is the following :
 
 Our architecture is composed by one cluster EMR (1 master and 5 slaves) and one cluster EC2 (8 instances).
 
-In our 8 instances EC2 we have : 
+In our 8 EC2 instances we have : 
 - 2 Masters nodes with apache-Spark-2.3.2 and apache-Zeppelin-0.8.0
 - 5 Slaves nodes with apache-Spark-2.3.2 and apache-cassandra-3.11.2, including zookeeper installed on 2 of these nodes.
 - The last one is a node created for the resilience of the Master. We Installed zookeeper in it. 
