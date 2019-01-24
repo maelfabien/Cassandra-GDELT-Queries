@@ -72,16 +72,26 @@ Grab the list of URLs to download the ZIP files from, from the english and the t
 // Download locally the list of URL
 fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt", "/tmp/masterfilelist.txt") // save the list file to the Spark Master
 fileDownloader("http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt", "/tmp/masterfilelist_translation.txt") 
+```
 
+Then, put the file that contains the list of the files to download into the S3 bucket :
+``` scala
 awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist.txt", new File("/tmp/masterfilelist.txt") )
 awsClient.putObject("fabien-mael-telecom-gdelt2018", "masterfilelist_translation.txt", new File( "/tmp/masterfilelist_translation.txt") )
+```
 
+We will focus only on year 2018 :
+``` scala
 val list_csv = spark.read.format("csv").option("delimiter", " ").
                     csv("s3a://fabien-mael-telecom-gdelt2018/masterfilelist.txt").
                     withColumnRenamed("_c0","size").
                     withColumnRenamed("_c1","hash").
                     withColumnRenamed("_c2","url")
 val list_2018_tot = list_csv.where(col("url").like("%/2018%"))
+```
+
+We download all the data of 2018 for the English URLs :
+``` scala
 list_2018_tot.select("url").repartition(100).foreach( r=> {
             val URL = r.getAs[String](0)
             val fileName = r.getAs[String](0).split("/").last
@@ -94,6 +104,7 @@ list_2018_tot.select("url").repartition(100).foreach( r=> {
 })
 
 ```
+
 We duplicate this task for the translation data. Then, we need to create four data frames : 
 - Mentions in english
 - Events in english
@@ -142,7 +153,8 @@ val events_1 = exportDF.withColumn("_tmp", $"value").select(
     $"_tmp".getItem(33).as("numarticles"),
     $"_tmp".getItem(53).as("actioncountry")
     )
-    
+
+// Join english and translated data
 val df_events_1 = events_1.union(events_trans_1)
 val df_mentions_1 = mentions_1.union(mentions_trans_1)
 
