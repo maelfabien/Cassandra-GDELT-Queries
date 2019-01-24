@@ -166,17 +166,26 @@ z.show(spark.sql(""" SELECT * FROM q1_1 ORDER BY NumArticles DESC LIMIT 10 """))
 
 ![alt text](q1.png)
 
+Zeppelin also has a great feature of Map Visualization. In order to activate it, you need to activate the Helium Zeppelin Leaflet in Zeppelin.
+
+![alt text](helium.png)
+
+Simply click on Helium from the interpreter menu, and activate "Zeppelin Leaflet". A new option on the Zeppelin show request will then appear :
+
+![alt text](map.png)
+
 ## 4. Budget
 
 One should take into account the budget of implementing such structure. The costs for our project was the following :
-- S3 storage and EMR to load the data in Cassandra : 50$
-- EC2 instances : 40$
+- S3 storage and EMR to load the data in Cassandra : 150$
+- EC2 instances : 60$
 
 ## 5. Potential improvements
 
 Some recent projects on the GDELT Project include :
 - a streaming architecture updating the data every 15 minutes
 - a web interface using CartoDB
-- ...
+- a further exploration : Time series, ML, DL
+- automate deployment (Ansible, Docker...)
 
 
