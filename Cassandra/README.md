@@ -75,6 +75,7 @@ PRIMARY KEY (category, subject, country));
 
 ## Useful tools
 - nodetool [status, describecluster...]
+- nodetool cfstats -- <keyspace>.<table> (keyspace/table information)
 - cqlsh
 - Zeppelin Cassandra interpreter
 
