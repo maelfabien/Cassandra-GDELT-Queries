@@ -1,0 +1,113 @@
+* All nodes
+
+** Install dependencies
+
+#+begin_src
+sudo su
+apt install cassandra
+apt instal linuxbrew
+logout
+brew install spark
+#+end_src
+
+* Master
+
+- public ip: ec2-18-208-150-40.compute-1.amazonaws.com
+- private ip: ip-172-31-88-67.ec2.internal
+
+** Connect 
+
+#+begin_src
+ssh -i "gdeltKeyPair.pem" ubuntu@ec2-3-90-3-115.compute-1.amazonaws.com
+#+end_src
+
+** Launch
+
+#+begin_src
+cd $SPARK_HOME/sbin/ && ./start-master.sh
+#+end_src
+
+Go to: http://18.208.150.40:8080 to see Spark web interface
+
+* Slave
+
+- public: ec2-35-174-106-4.compute-1.amazonaws.com
+- private: ip-172-31-91-32.ec2.internal
+
+** Connect
+
+#+begin_src
+ssh -i "gdeltKeyPair.pem" ubuntu@ec2-52-23-158-252.compute-1.amazonaws.com
+#+end_src
+
+** Launch
+
+#+begin_src
+cd $SPARK_HOME/sbin/ && ./start-slave.sh spark://ip-172-31-88-67.ec2.internal:7077
+#+end_src
+
+* AWS setup
+
+** Security groups
+
+By default, EC2 instances are configured not to allowed any traffic through. Therefore, we needed to create an /AWS security group/ and put all nodes in it in order for the machines to be able to communicate with each other.
+
+* Bibliography
+
+- https://opencredo.com/blogs/deploy-spark-apache-cassandra/
+- https://github.com/opencredo/cassandra-spark-ansible
+- 
+
+* Other
+
+** Master
+
+ssh -i "gdeltKeyPair.pem" ubuntu@ec2-3-90-3-115.compute-1.amazonaws.com
+
+** slaves
+
+ssh -i "gdeltKeyPair.pem" ubuntu@ec2-3-83-31-127.compute-1.amazonaws.com
+ssh -i "gdeltKeyPair.pem" ubuntu@ec2-3-81-189-200.compute-1.amazonaws.com
+ssh -i "gdeltkeypair.pem" ubuntu@ec2-3-84-191-98.compute-1.amazonaws.com
+ssh -i "gdeltkeypair.pem" ubuntu@ec2-54-172-109-182.compute-1.amazonaws.com
+
+* CCM
+
+#+begin_src
+ccm create test -v 3.11.3 -n 3 -s
+#+end_src
+
+* Configuration
+
+** cassandra.yaml
+
+#+begin_src
+cluster_name: "My cluster"
+rpc_address: 0.0.0.0
+seeds: "node_private_ip_address"
+listen_address: <node_private_ip_address>
+#+end_src
+
+deps:
+- sudo apt install python-pip;
+- pip install cassandra-driver
+
+#+begin_src
+./cqlsh $(hostname -i)
+#+end_src
+
+** zookeeper
+
+Files:
+
+- zoo.cfg
+- myid file
+
+
+* create table
+
+create table test (bar int, foo int, PRIMARY KEY(bar));
+
+//INSERT/UPDATE data into field N
+INSERT INTO usertable(1, 2)
+VALUES('xxx', N, 'fieldN value');
