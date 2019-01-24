@@ -174,13 +174,25 @@ Simply click on Helium from the interpreter menu, and activate "Zeppelin Leaflet
 
 ![alt text](Images/map.png)
 
-## 4. Budget
+## 4. Performance
+
+The total zipped files (Mentions, Events, GKG) reached 698.9 Gb on our S3 bucket. 
+
+```
+aws s3 ls --summarize --human-readable --recursive s3://fabien-mael-telecom-gdelt2018
+```
+
+![alt text](Images/total.png)
+
+In order to write the files into Cassandra, for 1 month of data, the requests usually took around 20 minutes. Then, once loaded, the different requests could be loaded within 1 to 10 seconds at most.
+
+## 5. Budget
 
 One should take into account the budget of implementing such structure. The costs for our project was the following :
 - S3 storage and EMR to load the data in Cassandra : 150$
 - EC2 instances : 60$
 
-## 5. Potential improvements
+## 6. Potential improvements
 
 Some recent projects on the GDELT Project include :
 - a streaming architecture updating the data every 15 minutes
