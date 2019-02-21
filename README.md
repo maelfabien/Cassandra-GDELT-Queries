@@ -11,6 +11,20 @@ In order to be able to work with a large amount of data, we have chosen to work 
 - AWS : EMR to transfer the data to Cassandra, and EC2 for the resiliency for the requests
 - Visualization : A Zeppelin Notebook
 
+## 0. Articles
+
+I've made a series of articles regarding this work. Here the links in order :
+- https://maelfabien.github.io/myblog/bigdata/01-zeppelin_local/
+- https://maelfabien.github.io/myblog/bigdata/02-zeppelin_emr/
+- https://maelfabien.github.io/myblog/bigdata/03-storage/
+- https://maelfabien.github.io/myblog/bigdata/04-zeppelin-GDELT/
+- https://maelfabien.github.io/myblog/bigdata/05-EC2/
+- https://maelfabien.github.io/myblog/bigdata/06-EC2_Cassandra/
+- https://maelfabien.github.io/myblog/bigdata/07-ZK/
+- https://maelfabien.github.io/myblog/bigdata/08-Spark/
+- https://maelfabien.github.io/myblog/bigdata/09-Scala/
+- https://maelfabien.github.io/myblog/bigdata/10-Scala_Cassandra/
+
 ## 1. The data
 
 - Description of the data Mentions and Events : http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf
