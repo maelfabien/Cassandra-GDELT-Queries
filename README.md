@@ -14,16 +14,16 @@ In order to be able to work with a large amount of data, we have chosen to work 
 ## 0. Articles
 
 I've made a series of articles regarding this work. Here the links in order :
-- https://maelfabien.github.io/myblog/bigdata/01-zeppelin_local/
-- https://maelfabien.github.io/myblog/bigdata/02-zeppelin_emr/
-- https://maelfabien.github.io/myblog/bigdata/03-storage/
-- https://maelfabien.github.io/myblog/bigdata/04-zeppelin-GDELT/
-- https://maelfabien.github.io/myblog/bigdata/05-EC2/
-- https://maelfabien.github.io/myblog/bigdata/06-EC2_Cassandra/
-- https://maelfabien.github.io/myblog/bigdata/07-ZK/
-- https://maelfabien.github.io/myblog/bigdata/08-Spark/
-- https://maelfabien.github.io/myblog/bigdata/09-Scala/
-- https://maelfabien.github.io/myblog/bigdata/10-Scala_Cassandra/
+- https://maelfabien.github.io/bigdata/zeppelin_local/
+- https://maelfabien.github.io/bigdata/zeppelin_emr/
+- https://maelfabien.github.io/bigdata/storage/
+- https://maelfabien.github.io/bigdata/EC2/
+- https://maelfabien.github.io/bigdata/EC2_Cassandra/
+- https://maelfabien.github.io/bigdata/ZK/
+- https://maelfabien.github.io/bigdata/Spark/
+- https://maelfabien.github.io/bigdata/zeppelin-GDELT/
+- https://maelfabien.github.io/bigdata/Scala/
+- https://maelfabien.github.io/bigdata/Scala_Cassandra/
 
 ## 1. The data
 
